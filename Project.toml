@@ -2,3 +2,9 @@ name = "Viterbi"
 uuid = "2765811d-84ca-41eb-b5d5-22a6727ded93"
 authors = ["David Ellison <davidehellison@gmail.com>"]
 version = "0.1.0"
+
+[extras]
+Test = "8dfed614-e22c-5e08-85e1-65c5234f0b40"
+
+[targets]
+test = ["Test"]
