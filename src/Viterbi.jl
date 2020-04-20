@@ -26,6 +26,11 @@ function decode(seq, states, start, stop, ts, es)
     final_score, idx = findmax(final_scores)
     return follow_backpointers(trellis, states[idx]), final_score
 end
+function decode(seq, start::Int, stop::Int, K::AbstractMatrix, E::AbstractMatrix)
+    ts = (k1, k2) -> K[k1, k2]
+    es = (k, t) -> E[k, t]
+    return decode(seq, 1:length(seq), start, stop, ts, es)
+end
 
 function argmax_k′(obs, t, k, states, trellis, ts, es)
     escore = es(k, obs)
@@ -68,7 +73,5 @@ function update!(trellis::Trellis, t, k′, k, score)
     trellis.trellis[k, t] = (k′, score)
     return trellis
 end
-
-wtype(trellis::Trellis{W}) where W = W
 
 end # module

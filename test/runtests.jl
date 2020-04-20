@@ -22,6 +22,7 @@ using Test
 
         @assert [es(tag, word) for tag in tagset, word in sentence] == emission_weights[[1,2],:]
 
-        @test Viterbi.decode([1,2,3],[1,2,3], 3, 3, ts, es) == ([1,2,1], -10)
+        @test Viterbi.decode([1,2,3],[1,2,3], 3, 3, ts, es) == ([1,2,1], -10) ==
+            Viterbi.decode([1,2,3], 3, 3, transition_weights, emission_weights)
     end
 end
