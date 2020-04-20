@@ -1,10 +1,13 @@
 module Viterbi
 
 """
-   Viterbi.decode(seq, states, start, stop, ts, es)
+   Viterbi.decode(seq, start, stop, K, E)
 
 Infer the best sequence of states using the Viterbi algorithm.
 """
+decode(seq, start::Int, stop::Int, K::AbstractMatrix, E::AbstractMatrix) =
+    decode(seq, 1:length(seq), start, stop, (k1, k2) -> K[k1, k2], (k, t) -> E[k, t])
+
 function decode(seq, states, start, stop, ts, es)
     m = length(seq)
     trellis = Trellis(length(seq), length(states))
@@ -25,11 +28,6 @@ function decode(seq, states, start, stop, ts, es)
     final_scores = [ts(k, stop) + score_upto(trellis, m, k) for k in states]
     final_score, idx = findmax(final_scores)
     return follow_backpointers(trellis, states[idx]), final_score
-end
-function decode(seq, start::Int, stop::Int, K::AbstractMatrix, E::AbstractMatrix)
-    ts = (k1, k2) -> K[k1, k2]
-    es = (k, t) -> E[k, t]
-    return decode(seq, 1:length(seq), start, stop, ts, es)
 end
 
 function argmax_k′(obs, t, k, states, trellis, ts, es)
